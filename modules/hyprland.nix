@@ -7,6 +7,9 @@
       monitor=eDP-1, disable
       monitor=,preferred,auto,auto
       
+      debug {
+          disable_logs = false
+      }
       exec-once = waybar &
       
       $terminal = ghostty 
@@ -106,6 +109,7 @@
       }
       
       cursor {
+
           inactive_timeout = 0.5
       }
       

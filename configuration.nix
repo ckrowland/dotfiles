@@ -13,7 +13,6 @@
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  boot.initrd.kernelModules = [ "amdgpu" ];
 
   networking.hostName = "macbook"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -42,11 +41,10 @@
     LC_TELEPHONE = "en_US.UTF-8";
     LC_TIME = "en_US.UTF-8";
   };
-
+ 
   services = {
     xserver = {
       enable = true;
-      # videoDrivers = [ "amdgpu" ];
       xkb = {
         layout = "us";
         variant = "colemak";
@@ -59,14 +57,14 @@
       extraPackages = [ pkgs.sddm-astronaut ];
       theme = "sddm-astronaut-theme";
     };
-    printing.enable = true;
-    pulseaudio.enable = false;
     pipewire = {
       enable = true;
       alsa.enable = true;
       alsa.support32Bit = true;
       pulse.enable = true;
     };
+    printing.enable = true;
+    pulseaudio.enable = false;
   };
 
 
@@ -113,7 +111,7 @@
     pkgs.qutebrowser
     pkgs.rofi-wayland
     pkgs.ripgrep
-    pkgs.sddm-astronaut
+    (pkgs.sddm-astronaut.override { embeddedTheme = "pixel_sakura_static"; })
     pkgs.swww
     pkgs.tmux
   ];
