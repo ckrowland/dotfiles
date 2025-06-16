@@ -13,6 +13,7 @@
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+  boot.initrd.kernelModules = [ "amdgpu" ];
 
   networking.hostName = "macbook"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -42,41 +43,35 @@
     LC_TIME = "en_US.UTF-8";
   };
 
-  # Enable the X11 windowing system.
-  services.xserver.enable = true;
-
-  # Enable the GNOME Desktop Environment.
-  services.xserver.displayManager.gdm.enable = true;
-  services.xserver.desktopManager.gnome.enable = true;
-
-  # Configure keymap in X11
-  services.xserver.xkb = {
-    layout = "us";
-    variant = "colemak";
-    options = "ctrl:swapcaps";
+  services = {
+    xserver = {
+      enable = true;
+      # videoDrivers = [ "amdgpu" ];
+      xkb = {
+        layout = "us";
+        variant = "colemak";
+        options = "caps:ctrl_modifier";
+      };
+    };
+    displayManager.sddm = {
+      enable = true;
+      package = pkgs.kdePackages.sddm;
+      extraPackages = [ pkgs.sddm-astronaut ];
+      theme = "sddm-astronaut-theme";
+    };
+    printing.enable = true;
+    pulseaudio.enable = false;
+    pipewire = {
+      enable = true;
+      alsa.enable = true;
+      alsa.support32Bit = true;
+      pulse.enable = true;
+    };
   };
 
-  # Enable CUPS to print documents.
-  services.printing.enable = true;
 
   # Enable sound with pipewire.
-  hardware.pulseaudio.enable = false;
   security.rtkit.enable = true;
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-    # If you want to use JACK applications, uncomment this
-    #jack.enable = true;
-
-    # use the example session manager (no others are packaged yet so this is enabled by default,
-    # no need to redefine it in your config for now)
-    #media-session.enable = true;
-  };
-
-  # Enable touchpad support (enabled default in most desktopManager).
-  # services.xserver.libinput.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.connor = {
@@ -88,10 +83,14 @@
     ];
   };
 
-  # Install firefox.
   programs.firefox.enable = true;
+  programs.hyprland = {
+    enable = true;
+    xwayland.enable = true;
+  };
 
   nixpkgs.config.allowUnfree = true;
+  fonts.packages = with pkgs; [ font-awesome ];
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
@@ -102,13 +101,20 @@
     fd
     gcc
     git
+    libnotify
     wget
     pkgs.cloudflare-warp
     pkgs.fzf
     pkgs.ghostty
+    pkgs.hyprland
+    pkgs.kitty
     pkgs.lazygit
-    pkgs.neovim 
+    pkgs.mako
+    pkgs.qutebrowser
+    pkgs.rofi-wayland
     pkgs.ripgrep
+    pkgs.sddm-astronaut
+    pkgs.swww
     pkgs.tmux
   ];
 
