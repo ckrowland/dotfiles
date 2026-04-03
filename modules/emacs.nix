@@ -20,10 +20,11 @@
       (savehist-mode 1)
       (scroll-bar-mode -1)
       (setq standard-indent 4)
-      (setq lsp-zig-zls-executable "${pkgs.zls}/bin")
-      (setq lsp-zig-zig-exe-path "${pkgs.zig}")
+      (setq lsp-zig-zls-executable "${pkgs.lib.getExe pkgs.zls}")
+      (setq lsp-zig-zig-exe-path "${pkgs.lib.getExe pkgs.zig}")
       (tool-bar-mode -1)
       (add-hook 'after-init-hook 'global-company-mode)
+      (add-hook 'zig-mode-hook #'lsp)
     '';
   };
 }
