@@ -9,6 +9,7 @@
   imports = [
     ./modules/hyprland.nix
     ./modules/waybar.nix
+    ./modules/emacs.nix
   ];
 
   # This value determines the Home Manager release that your configuration is
@@ -23,7 +24,6 @@
   # The home.packages option allows you to install Nix packages into your
   # environment.
   home.packages = [
-    pkgs.neovim
   ];
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
@@ -59,18 +59,6 @@
   #
   home.sessionVariables = {
     # EDITOR = "emacs";
-  };
-
-  programs.qutebrowser = {
-    enable = true;
-    settings.window.hide_decoration = true;
-    keyBindings = {
-      normal = {
-        "d" = "scroll-page 0 0.5";
-        "u" = "scroll-page 0 -0.5";
-        "x" = "tab-close";
-      };
-    };
   };
 
   # Let Home Manager install and manage itself.

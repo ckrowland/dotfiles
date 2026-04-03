@@ -105,16 +105,12 @@
       
           touchpad {
               natural_scroll = false
+              clickfinger_behavior = 1
           }
       }
       
       cursor {
-
           inactive_timeout = 0.5
-      }
-      
-      gestures {
-          workspace_swipe = false
       }
       
       device {

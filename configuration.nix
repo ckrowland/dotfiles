@@ -2,15 +2,21 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }:
+{
+  config,
+  pkgs,
+  pkgs-25-05,
+  ...
+}:
 
 {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-    ];
+  imports = [
+    # Include the results of the hardware scan.
+    ./hardware-configuration.nix
+  ];
 
   # Bootloader.
+  boot.kernelParams = [ "radeon.cik_support=0" "amdgpu.cik_support=1" ];
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
@@ -41,7 +47,14 @@
     LC_TELEPHONE = "en_US.UTF-8";
     LC_TIME = "en_US.UTF-8";
   };
- 
+
+  hardware.bluetooth = {
+    enable = true;
+    powerOnBoot = true;
+    settings.Policy.AutoEnable = true;
+  };
+  hardware.graphics.enable = true;
+
   services = {
     xserver = {
       enable = true;
@@ -57,6 +70,14 @@
       extraPackages = [ pkgs.sddm-astronaut ];
       theme = "sddm-astronaut-theme";
     };
+    flatpak = {
+      enable = true;
+      packages = [ "com.tdameritrade.ThinkOrSwim" ];
+    };
+    mullvad-vpn = {
+      enable = true;
+      package = pkgs.mullvad-vpn;
+    };
     pipewire = {
       enable = true;
       alsa.enable = true;
@@ -64,9 +85,7 @@
       pulse.enable = true;
     };
     printing.enable = true;
-    pulseaudio.enable = false;
   };
-
 
   # Enable sound with pipewire.
   security.rtkit.enable = true;
@@ -75,9 +94,12 @@
   users.users.connor = {
     isNormalUser = true;
     description = "Connor";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [
+      "networkmanager"
+      "wheel"
+    ];
     packages = with pkgs; [
-    #  thunderbird
+      #  thunderbird
     ];
   };
 
@@ -87,37 +109,40 @@
     xwayland.enable = true;
   };
 
-  nixpkgs.config.allowUnfree = true;
+  # pkgs.config.allowUnfree = true; #
   fonts.packages = with pkgs; [ font-awesome ];
 
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
+    brave
     curl
     fd
+    fzf
     gcc
+    ghostty
     git
+    hyprland
+    kitty
+    lazygit
     libnotify
+    pkgs-25-05.mpv
+    nixfmt
+    qbittorrent
+    rofi
+    ripgrep
+    (sddm-astronaut.override { embeddedTheme = "pixel_sakura_static"; })
+    swww
+    thunderbird
+    tmux
     wget
-    pkgs.cloudflare-warp
-    pkgs.fzf
-    pkgs.ghostty
-    pkgs.hyprland
-    pkgs.kitty
-    pkgs.lazygit
-    pkgs.mako
-    pkgs.qutebrowser
-    pkgs.rofi-wayland
-    pkgs.ripgrep
-    (pkgs.sddm-astronaut.override { embeddedTheme = "pixel_sakura_static"; })
-    pkgs.swww
-    pkgs.tmux
+    zulu
   ];
-
-  systemd.packages = [ pkgs.cloudflare-warp ]; # for warp-cli
-  systemd.targets.multi-user.wants = [ "warp-svc.service" ]; # causes warp-svc to be started automatically
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -126,6 +151,15 @@
   #   enable = true;
   #   enableSSHSupport = true;
   # };
+
+  nixpkgs.config.allowUnfree = true;
+  programs._1password.enable = true;
+  programs._1password-gui = {
+    enable = true;
+    # Certain features, including CLI integration and system authentication support,
+    # require enabling PolKit integration on some desktop environments (e.g. Plasma).
+    polkitPolicyOwners = [ "connor" ];
+  };
 
   # List services that you want to enable:
 
