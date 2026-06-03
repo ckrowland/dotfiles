@@ -79,7 +79,7 @@
       }
       
       dwindle {
-          pseudotile = true # Master switch for pseudotiling. Enabling is bound to mainMod + P in the keybinds section below
+          #pseudotile = true # Master switch for pseudotiling. Enabling is bound to mainMod + P in the keybinds section below
           preserve_split = true # You probably want this
       }
       
@@ -131,7 +131,7 @@
       bind = $mainMod, V, togglefloating,
       bind = $mainMod, R, exec, $menu
       bind = $mainMod, P, pseudo, # dwindle
-      bind = $mainMod, J, togglesplit, # dwindle
+      # bind = $mainMod, J, togglesplit, # dwindle
       bind = $mainMod, F, fullscreen
       
       bind = $mainMod SHIFT, H, movewindow, l
@@ -193,10 +193,10 @@
       bindl = , XF86AudioPrev, exec, playerctl previous
       
       # Ignore maximize requests from apps. You'll probably like this.
-      windowrulev2 = suppressevent maximize, class:.*
+      windowrulev = suppressevent maximize, match:class:.*
       
       # Fix some dragging issues with XWayland
-      windowrulev2 = nofocus,class:^$,title:^$,xwayland:1,floating:1,fullscreen:0,pinned:0
+      windowrulev = nofocus,match:class:^$,title:^$,xwayland:1,floating:1,fullscreen:0,pinned:0
       '';
   };
 }

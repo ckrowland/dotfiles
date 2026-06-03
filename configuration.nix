@@ -5,7 +5,6 @@
 {
   config,
   pkgs,
-  pkgs-25-05,
   ...
 }:
 
@@ -131,7 +130,7 @@
     kitty
     lazygit
     libnotify
-    pkgs-25-05.mpv
+    mpv
     nixfmt
     qbittorrent
     rofi
